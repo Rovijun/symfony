@@ -6,6 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
+use App\Entity\Beer;
 
 class BarController extends AbstractController
 {
@@ -44,10 +45,40 @@ class BarController extends AbstractController
 
     #[Route('/beers', name: 'beers')]
     public function beers(): Response{
-        $response = $this->_client->request(
-            'GET',
-            'https://raw.githubusercontent.com/Antoine07/hetic_symfony/main/Introduction/Data/beers.json'
-        );
-        return $this->render('bar/beers.html.twig', ["beers" => $response->toArray()["beers"]]);
+        $repository = $this->getDoctrine()->getRepository(Beer::class);
+
+        // dump($this->beers_api());
+        // dd($this->beers_api()['beers']);
+        // $beers = $this->beers_api() ;
+
+        return $this->render('bar/beers.html.twig', [
+            //'beers' => $this->beers_api()['beers'],
+            'beers' => $repository->findAll()
+        ]);
+    }
+
+    #[Route('/newbeer', name:'create_beer')]
+    public function createBeer(){
+        $entityManager = $this->getDoctrine()->getManager();
+
+        $beer = new Beer();
+        $beer->setname('Super Beer');
+        $beer->setPublishedAt(new \DateTime());
+        $beer->setDescription('Ergonomic and stylish!');
+        $beer->setRating(rand(0, 10));
+        $beer->setStatus(rand(0, 1) ? 'available' : 'unavailable');
+
+        $degrees = [0, 5, 4.5, 8, 9.5];
+        $rand_keys = array_rand($degrees, 1);
+
+        $beer->setDegree($degrees[$rand_keys]);
+
+        // tell Doctrine you want to (eventually) save the Product (no queries yet)
+        $entityManager->persist($beer);
+
+        // actually executes the queries (i.e. the INSERT query)
+        $entityManager->flush();
+
+        return new Response('Saved new beer with id '.$beer->getId());
     }
 }
