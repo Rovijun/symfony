@@ -68,6 +68,11 @@ class Beer
      */
     private $degree;
 
+    /**
+     * @ORM\Column(type="decimal", precision=5, scale=2, nullable=true)
+     */
+    private $price;
+
     public function __construct()
     {
         $this->categories = new ArrayCollection();
@@ -217,6 +222,18 @@ class Beer
     public function setDegree(?string $degree): self
     {
         $this->degree = $degree;
+
+        return $this;
+    }
+
+    public function getPrice(): ?string
+    {
+        return $this->price;
+    }
+
+    public function setPrice(?string $price): self
+    {
+        $this->price = $price;
 
         return $this;
     }

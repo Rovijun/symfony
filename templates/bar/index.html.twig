@@ -1,37 +1,31 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Page Bar{% endblock %}
-
-{% block sidebar %}
-    Sidebar
-{% endblock %}
+{% block title %}Home Page{% endblock %}
 
 {% block body %}
     <div class="row">
-        <h1>Bar</h1>
+        <h1>Open Bar</h1>
     </div>
 
     <div class="row">
-        <div class="col-md-6">
-            <div class="card">
-                <h5 class="card-header">Featured</h5>
-                <div class="card-body">
-                    <h5 class="card-title">Special title treatment</h5>
-                    <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                    <a href="#" class="btn btn-primary">Go somewhere</a>
+        {% for beer in beers %}
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h2 class="card-title">Name : {{ beer.name }}</h2>
+							<p class="card-text">Degree : {{ beer.degree }}</p>
+							<p class="card-text">Date : {{ beer.publishedAt | date('d-m-y h:s:m') }}</p>
+							<p class="card-text">Rating : {{ beer.rating }}</p>
+							<p class="card-text">Price : {{ beer.price }} $</p>
+							<img src="{{ asset('build/images/beer_00.jpeg') }}" />
+							<p>{{ beer.description }}</p>
+                            {% if beer.country %}
+								<p>Country : {{ beer.country.name }}</p>
+								<p class="text-primary">Address : {{ beer.country.address }}</p>
+							{% endif %}
+                    </div>
                 </div>
             </div>
-        </div>
-
-        <div class="col-md-6">
-            <div class="card">
-                <h5 class="card-header">Featured</h5>
-                <div class="card-body">
-                    <h5 class="card-title">Special title treatment</h5>
-                    <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                    <a href="#" class="btn btn-primary">Go somewhere</a>
-                </div>
-            </div>
-        </div>
+        {% endfor %}
     </div>
 {% endblock %}

@@ -16,16 +16,21 @@ class BarController extends AbstractController
         $this->_client = $client;
     }
 
-    #[Route('/', name: 'root')]
+    #[Route('/', name: 'home')]
     public function root(): Response
     {
-        return $this->redirectToRoute("bar");
+        /** @var BeerRepository $repository */
+        $repository = $this->getDoctrine()->getRepository(Beer::class);
+
+        return $this->render('bar/index.html.twig', [
+            'beers' => $repository->getThreeLastElement()
+        ]);
     }
 
     #[Route('/bar', name: 'bar')]
     public function index(): Response
     {
-        return $this->render('bar/index.html.twig', [
+        return $this->render('bar/bar.html.twig', [
             'controller_name' => 'BarController',
         ]);
     }
@@ -43,16 +48,24 @@ class BarController extends AbstractController
         return $this->render('bar/mention.html.twig');
     }
 
+
+    //récupération de l'id beer
+
+    #[Route('/beer/{id}', name: 'showbeer')]
+    public function show($id): Response{
+        $repository = $this->getDoctrine()->getRepository(Beer::class);
+
+        return $this->render('bar/showbeer.html.twig', [
+            'beer' => $repository->find($id)
+        ]);
+    }
+
+    
     #[Route('/beers', name: 'beers')]
     public function beers(): Response{
         $repository = $this->getDoctrine()->getRepository(Beer::class);
 
-        // dump($this->beers_api());
-        // dd($this->beers_api()['beers']);
-        // $beers = $this->beers_api() ;
-
         return $this->render('bar/beers.html.twig', [
-            //'beers' => $this->beers_api()['beers'],
             'beers' => $repository->findAll()
         ]);
     }

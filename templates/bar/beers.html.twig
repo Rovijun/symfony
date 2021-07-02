@@ -1,5 +1,7 @@
 {% extends 'base.html.twig' %}
 
+{% block title %}List of beer{% endblock %}
+
 {% block sidebar %}
     Sidebar
 {% endblock %}
@@ -14,16 +16,20 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-body">
-                        <h2 class="card-title">Name :{{ beer.name }}</h2>
-							<p class="card-text">Degree :{{ beer.degree }}</p>
-							<p class="card-text">Date :{{ beer.publishedAt | date('d-m-y h:s:m') }}</p>
-							<p class="card-text">Rating :{{ beer.rating }}</p>
+                        <h2 class="card-title">Name : {{ beer.name }}</h2>
+							<p class="card-text">Degree : {{ beer.degree }}</p>
+							<p class="card-text">Date : {{ beer.publishedAt | date('d-m-y h:s:m') }}</p>
+							<p class="card-text">Rating : {{ beer.rating }}</p>
+							<p class="card-text">Price : {{ beer.price }} $</p>
 							<img src="{{ asset('build/images/beer_00.jpeg') }}" />
 							<p>{{ beer.description }}</p>
-                            {% if beer.country %}
-								<p>Country : {{ beer.country.name }}</p>
-								<p class="text-primary">Address : {{ beer.country.address }}</p>
+                            {% if beer.status == 'unavailable' %}
+								<p class="text-danger">Status : {{ beer.status }}</p>
+							{% else %}
+								<p class="text-success">Status : {{ beer.status }}</p>
 							{% endif %}
+
+                            <a href="{{ path('showbeer', { 'id': beer.id }) }}" class="btn btn-primary stretched-link">Visualiser</a>
                     </div>
                 </div>
             </div>

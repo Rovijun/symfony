@@ -3,8 +3,7 @@
     <head>
         <meta charset="UTF-8">
         <title>{% block title %}Welcome!{% endblock %}</title>
-        {# Run `composer require symfony/webpack-encore-bundle`
-           and uncomment the following Encore helpers to start using Symfony UX #}
+
         {% block stylesheets %}
             {{ encore_entry_link_tags('app') }}
         {% endblock %}
@@ -15,12 +14,13 @@
     </head>
     <body>
         <div class="container">
+        {% include 'partials/menu.html.twig' %}
             <div class="row">
-                <div class="col-md-4">
+                <div class="col-md-3">
                     {% block sidebar %}{% endblock %}
                 </div>
 
-                <div class="col-md-8">
+                <div class="col-md-9">
                     {% block body %}{% endblock %}
                 </div>
             </div>
